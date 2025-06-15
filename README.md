@@ -12,6 +12,8 @@ Prometheus exporter for Pi-hole metrics written in Rust. Exposes Pi-hole statist
 - Systemd service integration
 - Performance: ~100ms scrape duration/4MB memory usage on Pi 4B+
 
+Works with [Grafana Dashboard](https://grafana.com/grafana/dashboards/21043-pi-hole-ver6-stats/). Credit to [this project](https://github.com/bazmonk/pihole6_exporter) for creating the foundation. I just converted code
+
 ## Installation
 
 ### From GitHub Releases
