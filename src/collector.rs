@@ -1,3 +1,15 @@
+use std::{
+    sync::{Arc, Mutex},
+    time::Duration,
+};
+
+use ahash::{HashMap, HashMapExt};
+use chrono::Utc;
+use prometheus_client::{encoding::text::encode, registry::Registry};
+use reqwest::Client;
+use secrecy::{ExposeSecret, SecretString};
+use serde_json::Value;
+
 use crate::{
     Result,
     api::{AuthRequest, AuthResponse, QueriesResponse, StatsResponse, UpstreamsResponse},
@@ -5,15 +17,6 @@ use crate::{
         CategoryLabels, ClientLabels, PiholeMetrics, QueryStatusLabels, QueryTypeLabels,
         ReplyTypeLabels, UpstreamCountLabels, UpstreamLabels,
     },
-};
-use prometheus_client::{encoding::text::encode, registry::Registry};
-use reqwest::Client;
-use secrecy::{ExposeSecret, SecretString};
-use serde_json::Value;
-use std::{
-    collections::HashMap,
-    sync::{Arc, Mutex},
-    time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
 /// Pi-hole collector that fetches metrics from Pi-hole API and updates Prometheus metrics
@@ -196,8 +199,8 @@ impl PiholeCollector {
         }
 
         // Get 1-minute stats
-        let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
-        let last_min = (now / 60) * 60;
+        let now = Utc::now();
+        let last_min = now.timestamp() / 60 * 60;
         let min_before = last_min - 60;
 
         let queries_json = self
