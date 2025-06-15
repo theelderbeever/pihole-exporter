@@ -1,0 +1,14 @@
+[Unit]
+Description=Pihole Prometheus Exporter
+After=pihole-FTL.service
+
+[Service]
+ExecStart=/usr/local/bin/pihole-exporter
+Type=exec
+Restart=always
+
+[Environment]
+PIHOLE_EXPORTER__PIHOLE_PASSWORD="<your pihole password>"
+
+[Install]
+WantedBy=default.target
