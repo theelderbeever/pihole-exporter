@@ -10,6 +10,7 @@ Prometheus exporter for Pi-hole metrics written in Rust. Exposes Pi-hole statist
 - Health check endpoint
 - Configurable via command line arguments or environment variables
 - Systemd service integration
+- Performance: ~100ms scrape duration/4MB memory usage on Pi 4B+
 
 ## Installation
 
