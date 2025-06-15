@@ -19,15 +19,15 @@ Download the latest release for your platform:
 
 ```bash
 # Linux aarch64
-curl -L https://github.com/USERNAME/pihole-prometheus/releases/latest/download/pihole-exporter-linux-aarch64.tar.gz | tar xz
+curl -L https://github.com/theelderbeever/pihole-exporter/releases/latest/download/pihole-exporter-linux-aarch64.tar.gz | tar xz
 sudo mv pihole-exporter /usr/local/bin/
 ```
 
 ### From Source
 
 ```bash
-git clone <repository-url>
-cd pihole-prometheus
+git clone https://github.com/theelderbeever/pihole-exporter.git
+cd pihole-exporter
 cargo build --release
 sudo cp target/release/pihole-exporter /usr/local/bin/
 ```
@@ -46,19 +46,21 @@ pihole-exporter --pihole 192.168.1.100 --password your-pihole-password
 # Custom exporter port and host
 pihole-exporter --host 0.0.0.0 --port 9617 --pihole 192.168.1.100
 ```
+```bash
+❯ pihole-exporter -h
+Command line arguments for the Pi-hole Prometheus exporter
 
-### Command Line Options
+Usage: pihole-exporter [OPTIONS]
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `--host` | `127.0.0.1` | IP address to bind exporter |
-| `--port` | `3141` | Port to expose metrics |
-| `--pihole` | `localhost` | Pi-hole hostname/IP |
-| `--tls` | `false` | Use HTTPS for Pi-hole communication |
-| `--password` | None | Pi-hole authentication password |
-
-### Environment Variables
-
+Options:
+      --host <HOST>          IP for exporter instance. Usually 127.0.0.1 or 0.0.0.0 [env: PIHOLE_EXPORTER__EXPORTER_HOST=] [default: 127.0.0.1]
+  -p, --port <PORT>          Port to expose for scraping [env: PIHOLE_EXPORTER__EXPORTER_PORT=] [default: 3141]
+      --pihole <PIHOLE>      Base url/port of Pi-hole instance [env: PIHOLE_EXPORTER__PIHOLE_HOST=] [default: localhost]
+      --tls                  Use https for pihole communication [env: PIHOLE_EXPORTER__PIHOLE_TLS=]
+  -P, --password <PASSWORD>  Authentication token (if required) [env: PIHOLE_EXPORTER__PIHOLE_PASSWORD=]
+  -h, --help                 Print help
+  -V, --version              Print version
+```
 ```bash
 export PIHOLE_EXPORTER__PIHOLE_PASSWORD="your-password"
 ```
@@ -77,8 +79,8 @@ sudo systemctl start pihole-exporter
 Edit the service file to configure your Pi-hole password:
 
 ```ini
-[Environment]
-PIHOLE_EXPORTER__PIHOLE_PASSWORD="your-pihole-password"
+[Service]
+Environment=PIHOLE_EXPORTER__PIHOLE_PASSWORD="your-pihole-password"
 ```
 
 ## Endpoints
@@ -109,6 +111,6 @@ scrape_configs:
 
 ## Requirements
 
-- Rust 1.70+
+- Rust 1.85+
 - Pi-hole instance accessible via HTTP/HTTPS
 - Network access between exporter and Pi-hole
